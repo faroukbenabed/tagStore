@@ -1,6 +1,7 @@
 <?php
 
 require ("../inc/db_connection.php");
+
 if(isset($_POST["signin"])){
 
     $email= $_POST["email"] ;
@@ -9,8 +10,12 @@ if(isset($_POST["signin"])){
 
     $sql = "SELECT * FROM user WHERE email ='$email' and pw= '$Password'";
     $data= $conn->prepare($sql);
-    if($data->execute()) {
+    $exec_result=2;
 
+
+    if($data->execute() && $data->rowCount()>0) {
+
+        $exec_result=1;
         session_start();
         $_SESSION["email"] = $email;
         $_SESSION["user"]=$data->fetch();
@@ -24,20 +29,21 @@ if(isset($_POST["signin"])){
             setcookie("ident","");
 
         }
-        foreach ($data as $row) {
-            $email=$row['email'];
+
+
            header ("location:index.php?email=$email") ;
-        }
+
     }
-    else{$log_error=TRUE;
+    else{$exec_result=0;
 
     }
 
 }
-require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
+require("../view/header.php");
 ?>
-<center>
-<div class="card" style="width: 28rem;">
+<div class="container-fluid rounded" style="border: darkcyan 3px !important; width: 50%;margin-top: 2%">
+    <div class="container-fluid rounded" style="border: darkcyan 3px !important; width: 80%; height: 50%;">
+<div class="" style="width: 80%">
 <form action="" method="post">
     <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
@@ -47,6 +53,9 @@ require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
     <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
         <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    <?php if(isset($exec_result) && $exec_result=0){?>
+        <small color="red">Check your memory and try again !</small>
+    <?php }?>
     </div>
     <div class="form-check">
         <input type="checkbox" name="remember" class="form-check-input" id="exampleCheck1">
@@ -55,4 +64,5 @@ require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
     <button type="submit" name="signin"class="btn btn-primary">Sign In</button>
 </form>
 </div>
-</center>
+    </div>
+    </div>
