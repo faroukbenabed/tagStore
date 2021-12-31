@@ -9,6 +9,10 @@ class User
     private $pw;
     private $signUpDate;
 
+    function __construct()
+    {
+
+    }
     /**
      * @return mixed
      */
@@ -105,6 +109,14 @@ class User
         $this->signUpDate = $signUpDate;
     }
 /// End Getters & Setters
+    public function post($firstname,$lastname,$email,$password)
+    {
+        //require ('inc/db_connection.php');
+        $conn = new PDO("mysql:host=localhost;dbname=tagstore", 'root', '');
+        $date=date("Y-m-d h:i:s");
+        $req = $conn->prepare('Insert into user values(null,"'.$firstname.'","'.$lastname.'","'.$email.'","'.$password.'","'.$date.'",null,10,0)');
+        return $req->execute();
+    }
 
 
 

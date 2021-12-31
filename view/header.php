@@ -1,6 +1,9 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-session_start();}
+if (session_status() === PHP_SESSION_NONE) {session_start();}
+if(isset($_GET["u"])){
+    $_SESSION["host_user"]=$_GET["u"];
+
+}
 if(isset($_SESSION["email"])){
 $conn = new PDO("mysql:host=localhost;dbname=tagstore", 'root', '');
 $email=$_SESSION["email"];
@@ -12,7 +15,7 @@ $user=$data->fetch();
 $date=date("Y-m-d");
 
 if(isset($_POST["getPoint"])){
-    $updateData=$conn->prepare("update user set points=points+10,last_point_date='$date'");
+    $updateData=$conn->prepare("update user set points=points+10,last_point_date='$date' where email='$email'");
     $updateData->execute();
 
     header('Location: index.php');
@@ -26,7 +29,24 @@ require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
 ?>
     <title>TagStore</title>
     <link rel="icon" href="<?php echo $PREFIX_URL;?>/img/tagstoreicon.png">
+<meta charset="UTF-8" />
+<script>
+    function clipboard() {
+        /* Get the text field */
+        var copyText = document.getElementById("invite");
+        var url = document.getElementById("inviteurl");
+        /* Select the text field */
+         /* For mobile devices */
 
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
+        url.select();
+        document.execCommand('copy');
+
+        /* Alert the copied text */
+        alert("Copied the text: " + url.value);
+    }
+</script>
 <nav class="navbar sticky-top navbar-expand-lg  navbar-dark bg-dark">
     <a class="navbar-brand" href="index.php">
         <img src="<?php echo $PREFIX_URL;?>/img/tagstorew.png" height="50" class="d-inline-block align-top" alt="">
@@ -86,11 +106,18 @@ require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
         <span class="sr-only">unread messages</span>
     </button>
     </form>
+            <form class="form-inline" style="margin-right: 0.5% !important;">
+            <button type="button" id="invite"  class="btn btn-warning" onclick="clipboard();">
+                Invite :
+                <input style="height: 20px;" id="inviteurl" value="http://localhost/tagstore/view/index?u=<?php echo $user['id'];?>">
+                <span class="sr-only">Get your invitation link</span>
+            </button>
+        </form>
     <?php } ?>
-    <form class="form-inline" style="margin-right: 0.5% !important;">
+    <!--<form class="form-inline" style="margin-right: 0.5% !important;">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    </form>-->
     <?php if(!isset($_SESSION["user"])){?>
     <form>
     <a href="login.php" style="text-decoration: none;">

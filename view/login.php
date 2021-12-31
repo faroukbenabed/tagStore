@@ -63,6 +63,8 @@ require("../view/header.php");
     </div>
     <button type="submit" name="signin"class="btn btn-primary">Sign In</button>
 </form>
+    <br>
+    Ohh really? you don't have an account yet? <br>Harry click <a href="signup.php">here</a> to get one.
 </div>
     </div>
     </div>
