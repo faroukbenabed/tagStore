@@ -103,7 +103,7 @@ $cat[$category["id"]]=$category["name"];
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="product_form.php">Product</a>
-                
+                <a class="dropdown-item" href="event.php">Event</a>
               <!--  <a class="dropdown-item" href="#">Something else here</a> -->
             </div>
         </li>

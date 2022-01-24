@@ -9,6 +9,8 @@
     $user=$data->fetch();
 }
 
+
+
     $sql = "SELECT * FROM product where id=".$_GET["id"];
     $data= $conn->prepare($sql);
     $data->execute();
@@ -23,11 +25,38 @@
     $data= $conn->prepare($sql);
     $data->execute();
     $manufactory=$data->fetch();
+
+
+
+    
     if(isset($_POST['ppay']) || isset($_POST['tspay'])){
+
+
+        
+
+/////event
+$free=0;
+$sql = "SELECT * FROM event";
+$data= $conn->prepare($sql);
+$data->execute();
+$events=$data->fetchAll();
+foreach ($events as $event ) {
+$date=date("Y-m-d H:i:s");
+if(isset($_SESSION['user'] ) && $event["user"]==$_SESSION['user']['id'] && $event['start_date']<$date &&  $event['end_date']!=null && $event['end_date']>$date && $product["coin"]<=$event['solde']){
+    $free=1;
+    $req=$conn->prepare('update event set end_date=null');
+    $update_query=$req->execute();
+}
+
+}
+
+///// envent end
+
+
         $type=(isset($_POST['ppay']))?"dt":"ts";
         $pay=(isset($_POST['ppay']))?"price":"coin";
         $pay_type=(isset($_POST['ppay']))?"ppay":"tspay";
-       if(($pay=="price" && $user["solde"]>=$product["price"]) || ($pay=="coin" && $user["points"]>=$product["coin"])){
+       if((($pay=="price" && $user["solde"]>=$product["price"]) || ($pay=="coin" && $user["points"]>=$product["coin"]) ) || $free==1){
         $date=date("Y-m-d h:i:s");
         $sql = "Insert into order_t values (null,".$_SESSION["user"]["id"].",'".$date."','En cours',null,0,'".$type."') ";
     $data= $conn->prepare($sql);
@@ -41,9 +70,10 @@
     $req = $conn->prepare('update order_t set price=price+'.$product[$pay].' where id='.$order_id);
     $update_query=$req->execute();
 
+if($free==0){
     $req = $pay=(isset($_POST['ppay']))?$conn->prepare('update user set solde=solde-'.$product["price"].' where id='.$_SESSION["user"]["id"]):$conn->prepare('update user set points=points-'.$product["coin"].' where id='.$_SESSION["user"]["id"]);
     $update_query=$req->execute();
-
+}
 
     ////Progress
     $id=$_SESSION["user"]["id"];

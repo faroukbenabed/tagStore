@@ -25,7 +25,12 @@ if(!isset($_GET['cat'])){
 </style>
 <div class="container-fluid " style="height: 25%">
     <marquee class="rounded">
-       <?php foreach ($events as $event ) {
+       <?php 
+      
+       foreach ($events as $event ) {
+           
+    
+           if($event["img"]!=null){
        ?>
         <div class="container" style="width: 90%; height: 2%; margin-top: 0%; background-color: indianred">
 
@@ -42,9 +47,49 @@ if(!isset($_GET['cat'])){
                 </li>
             </ul>
         </div>
-        <?php }?>
+        <?php }
+    
+    
+    
+    }?>
     </marquee>
 </div>
+
+<?php 
+ $date=date("Y-m-d H:i:s");
+ echo $date;
+foreach ($events as $event ) {
+   
+if(isset($_SESSION['user'] ) && $event["user"]==$_SESSION['user']['id'] && $event['start_date']<$date && $event['end_date']!=null && $event['end_date']>$date){
+   
+?>
+<div class="jumbotron jumbotron-fluid">
+<div class="container">
+        <h1 class="display-4"><?php echo $event['name']." ".$user["name"]; ?></h1>
+        <p class="lead"><?php echo $event['description'];?></p>
+        <h5><?php echo"You have until ".$event['end_date']." to get an item with the max total of ".$event['solde']." point";?></h5>
+    </div>
+</div>
+<?php 
+
+
+}else if(isset($_SESSION['user'] ) && $event["user"]==$_SESSION['user']['id'] &&($event['end_date'])!=null && ($event['end_date']<$date))
+{
+?>
+<div class="jumbotron jumbotron-fluid">
+<div class="container">
+        <h1 class="display-4"><?php echo "Ohh noo ".$user["name"]; ?></h1>
+        <p class="lead">You have missed your lucky chance for today, maybe next time.</p>
+        <h5><?php echo"The missed event is : You have until ".$event['end_date']." to get items with the max total ".$event['solde'];?></h5>
+    </div>
+</div>
+<?php 
+}
+
+
+
+}
+?>
 
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
@@ -169,7 +214,7 @@ if(isset($_GET['cat'])){
                     <h5 class="card-title" style="height: 15%"><?php echo $product['name'];?></h5>
                     <p class="card-text" style="height: 40%; overflow: auto;"><?php echo $product['description'];?></p>
 
-                    <p class="card-text" style="height: 10%;"><b><?php echo $product['price'];?> Dt</b> | <b><?php echo $product['price'];?> TC</b></p>
+                    <p class="card-text" style="height: 10%;"><b><?php echo $product['price'];?> Dt</b> | <b><?php echo $product['coin'];?> Ts</b></p>
                     <a href="product_detail.php?id=<?php echo $product['id']; ?>" class="btn btn-warning">See more.</a>&nbsp;&nbsp;<!--<a href="#" class="btn btn-warning">Add to panel</a>-->
                     <?php if(dateDiff($product['fi_date'],$date)<3){?><span class="badge badge-danger" style="margin-right: 1%;">New</span><?php }?><span class="badge badge-info"><?php echo $cat[$product["category"]]?></span>    
                 </div>
