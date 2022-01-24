@@ -138,7 +138,7 @@ if($progress["purchased_products"]==10){
   <li class="media">
     <!--<img class="mr-3" src=".../64x64" alt="Generic placeholder image">-->
     <div class="media-body">
-      <h5 class="mt-0 mb-1">Points steak <?php echo $progress["points_streak"]?>/30 <small>| To get 50 points</small></h5>
+      <h5 class="mt-0 mb-1">Points streak <?php echo $progress["points_streak"]?>/30 <small>| To get 50 points</small></h5>
       
       <div class="progress">
   <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: <?php echo $progress["points_streak"]/30*100?>%" aria-valuenow="<?php echo $progress["points_streak"]/30*100?>" aria-valuemin="0" aria-valuemax="100"><?php echo $progress["points_streak"]/30*100?>%</div>
