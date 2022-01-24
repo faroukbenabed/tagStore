@@ -13,11 +13,25 @@ $data->execute();
 $user=$data->fetch();
 }
 $date=date("Y-m-d");
-
+function dateDiff($date1, $date2)
+{
+    $date1_ts = strtotime($date1);
+    $date2_ts = strtotime($date2);
+    $diff = $date2_ts - $date1_ts;
+    return round($diff / 86400);
+}
 if(isset($_POST["getPoint"])){
     $updateData=$conn->prepare("update user set points=points+10,last_point_date='$date' where email='$email'");
     $updateData->execute();
-
+    $id=$_SESSION['user']['id'];
+if(dateDiff($user['last_point_date'],$date)==1){
+    
+    $updateData=$conn->prepare("update user_progress set points_streak=points_streak+1 where user=$id");
+    $updateData->execute();
+}else{
+    $updateData=$conn->prepare("update user_progress set points_streak=0 where user=$id");
+    $updateData->execute();
+}
     header('Location: index.php');
 }
 if(isset($_POST["logout"])){
@@ -26,6 +40,18 @@ if(isset($_POST["logout"])){
     header('Location: index.php');
 }
 require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
+
+
+$sql = "SELECT * FROM category";
+$data= $conn->prepare($sql);
+$data->execute();
+$categories=$data->fetchAll();
+
+$cat=array();
+foreach($categories as $category){
+$cat[$category["id"]]=$category["name"];
+    
+}
 ?>
     <title>TagStore</title>
     <link rel="icon" href="<?php echo $PREFIX_URL;?>/img/tagstoreicon.png">
@@ -57,14 +83,17 @@ require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
         <li class="nav-item active">
             <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Accessories</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Consols</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Gadgets</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Category
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <?php for($i=1;$i<count($cat);$i++){?>
+                    <a class="dropdown-item" href="index.php?cat=<?php echo $i;?>"><?php echo $cat[$i];?></a>
+                <?php }?>
+                
+              <!--  <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,7 +101,7 @@ require($_SERVER['DOCUMENT_ROOT']."/tagstore/inc/config.php");
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <a class="dropdown-item" href="product_form.php">Product</a>
-                <a class="dropdown-item" href="#">User</a>
+                
               <!--  <a class="dropdown-item" href="#">Something else here</a> -->
             </div>
         </li>

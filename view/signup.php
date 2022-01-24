@@ -38,6 +38,9 @@ if(isset($_SESSION["host_user"])) {
 if(isset($query_result) && $query_result && isset($_SESSION["host_user"])){
     $req = $conn->prepare('update user set points=points+10 where id='.$_SESSION["host_user"]);
     $update_query=$req->execute();
+    $id=$_SESSION['host_user'];
+    $updateData=$conn->prepare("update user_progress set link_sharing=link_sharing+1 where user=$id");
+    $updateData->execute();
 
 }
 ?>

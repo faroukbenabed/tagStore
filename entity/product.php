@@ -8,6 +8,12 @@ private $name;
 private $description;
 private $price;
 private $coins;
+private $fiDate;
+private $img;
+private $category;
+private $color;
+private $reference;
+private $manufactory;
 
 function __construct()
 {
@@ -110,11 +116,19 @@ function __construct()
         $this->coins = $coins;
     }
 /// End Getters & Setters
-    public function post($quantity,$name,$description,$price,$coins)
+    public function post($quantity,$name,$description,$price,$coins,$img,$category,$color,$reference,$manufactory)
     {
+
+     
+                $img=($img!=null)?'"'.$img.'"':null;
+                $category=($category!=null)?$category:null;
+                $color=($color!=null)?'"'.$color.'"':null;
+                $reference=($reference!=null)?'"'.$reference.'"':null;
+                $manufactory=($manufactory!=null)?$manufactory:null;
+
         //require ('inc/db_connection.php');
         $conn = new PDO("mysql:host=localhost;dbname=tagstore", 'root', '');
-        $req = $conn->prepare('Insert into product values(null,'.$quantity.',"'.$name.'","'.$description.'",'.$price.','.$coins.',null,null)');
+        $req = $conn->prepare('Insert into product values(null,'.$quantity.',"'.$name.'","'.$description.'",'.$price.','.$coins.',null,'.$img.','.$category.','.$color.','.$reference.','.$manufactory.')');
 
 
 

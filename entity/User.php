@@ -115,7 +115,11 @@ class User
         $conn = new PDO("mysql:host=localhost;dbname=tagstore", 'root', '');
         $date=date("Y-m-d h:i:s");
         $req = $conn->prepare('Insert into user values(null,"'.$firstname.'","'.$lastname.'","'.$email.'","'.$password.'","'.$date.'",null,10,0)');
-        return $req->execute();
+        $user = $req->execute();
+        $id=$conn->lastInsertId();
+        $req = $conn->prepare("Insert into user_progress values($id,0,0,0)");
+        $req->execute();
+        return $user;
     }
 
 
