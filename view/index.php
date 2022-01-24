@@ -20,7 +20,9 @@ $data->execute();
 $products=$data->fetchAll();
 if(!isset($_GET['cat'])){
 ?>
-
+<style>
+    .card:hover{box-shadow: 2px 2px 5px;}
+</style>
 <div class="container-fluid " style="height: 25%">
     <marquee class="rounded">
        <?php foreach ($events as $event ) {
@@ -52,6 +54,8 @@ if(!isset($_GET['cat'])){
 </div>
 <?php 
 //// Progresss 
+
+if(isset($_SESSION["user"])){
 $id=$_SESSION['user']['id'];
 $sql = "SELECT * FROM user_progress where user=$id";
 $data= $conn->prepare($sql);
@@ -127,12 +131,18 @@ if($progress["purchased_products"]==10){
 
 
 
-<?php }?>
+<?php }}?>
 
 
-<div class="container-fluid rounded" style="border: darkcyan 3px !important; width: 80%;margin-top:5%">
+<div class="container-fluid rounded" style="border: darkcyan 3px !important; width: 80%;margin-top:1%">
 
-
+<?php 
+if(isset($_GET['cat'])){
+    echo '<h3>'.$cat[$_GET['cat']].'</h3>';
+}else{
+    echo '<h3>Products in stock</h3>';
+}
+?>
 
     
   <?php if(count($products)>0){?>
@@ -147,9 +157,11 @@ if($progress["purchased_products"]==10){
         
         $i=1;
         foreach ($products as $product ) {
-
+            if($product['quantity']>0){
             ?>
-        <td><div class="card" style="width: 18rem; max-height: 600px; height: 600px;">
+        <td>
+        <a href="product_detail.php?id=<?php echo $product['id']; ?>" style="text-decoration:none;color:black">    
+        <div class="card" style="width: 18rem; max-height: 600px; height: 600px;">
                 <div style="height: 50%;">
                 <img class="card-img-top" src="<?php echo $product['img'];?>" alt="Card image cap" style="max-height: 300px;">
                 </div>
@@ -159,14 +171,17 @@ if($progress["purchased_products"]==10){
 
                     <p class="card-text" style="height: 10%;"><b><?php echo $product['price'];?> Dt</b> | <b><?php echo $product['price'];?> TC</b></p>
                     <a href="product_detail.php?id=<?php echo $product['id']; ?>" class="btn btn-warning">See more.</a>&nbsp;&nbsp;<!--<a href="#" class="btn btn-warning">Add to panel</a>-->
-                    </div>
+                    <?php if(dateDiff($product['fi_date'],$date)<3){?><span class="badge badge-danger" style="margin-right: 1%;">New</span><?php }?><span class="badge badge-info"><?php echo $cat[$product["category"]]?></span>    
+                </div>
 
-            </div></td>
+            </div>
+        </a>
+        </td>
 
         <?php
             if($i % 4 ==0){echo "</tr><tr>";}
             $i++;
-        }
+        }}
         ?>
     </table>
     <?php }else{?>

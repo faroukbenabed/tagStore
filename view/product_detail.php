@@ -1,13 +1,13 @@
 <?php
     require("header.php");
     $conn = new PDO("mysql:host=localhost;dbname=tagstore", 'root', '');
-    
+    if (isset($_SESSION["email"])){
     $email=$_SESSION["email"];
     $sql = "SELECT * FROM user WHERE email ='$email'";
     $data= $conn->prepare($sql);
     $data->execute();
     $user=$data->fetch();
-
+}
 
     $sql = "SELECT * FROM product where id=".$_GET["id"];
     $data= $conn->prepare($sql);
@@ -126,7 +126,7 @@
         <?php if(!isset($_SESSION['email'])){?>
         <a href="login.php" style="text-decoration: none;">
             <?php }?>
-        <button class="btn btn-outline-warning" type="<?php if(isset($_SESSION['email'])){ echo 'submit';}else{echo "button";}?>" name="tspay">Buy : <?php echo $product['coin'];?> Ts</button>
+        <button class="btn btn-outline-warning text-dark" type="<?php if(isset($_SESSION['email'])){ echo 'submit';}else{echo "button";}?>" name="tspay">Buy : <?php echo $product['coin'];?> Ts</button>
             <?php if(!isset($_SESSION['email'])){?>
         </a>
                 <?php }?>
@@ -136,7 +136,7 @@
         <?php if(!isset($_SESSION['email'])){?>
         <a href="login.php" style="text-decoration: none;">
             <?php }?>
-        <button class="btn btn-outline-warning" type="<?php if(isset($_SESSION['email'])){ echo 'submit';}else{echo "button";}?>" name="ppay">Buy : <?php echo $product['price'];?> Dt</button>
+        <button class="btn btn-outline-warning text-dark" type="<?php if(isset($_SESSION['email'])){ echo 'submit';}else{echo "button";}?>" name="ppay">Buy : <?php echo $product['price'];?> Dt</button>
             <?php if(!isset($_SESSION['email'])){?>
         </a>
                 <?php }?>

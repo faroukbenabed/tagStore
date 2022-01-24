@@ -78,7 +78,7 @@ if(isset($query_result) && $query_result && isset($_SESSION["host_user"])){
 
                 </div>
 
-                <button type="submit" name="signup"class="btn btn-primary">Sign Up</button>
+                <button type="submit" name="signup"class="btn btn-warning">Sign Up</button>
             </form>
         </div>
     </div>

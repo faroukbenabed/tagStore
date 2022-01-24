@@ -4,8 +4,9 @@ if(isset($_GET["u"])){
     $_SESSION["host_user"]=$_GET["u"];
 
 }
-if(isset($_SESSION["email"])){
 $conn = new PDO("mysql:host=localhost;dbname=tagstore", 'root', '');
+if(isset($_SESSION["email"])){
+
 $email=$_SESSION["email"];
 $sql = "SELECT * FROM user WHERE email ='$email'";
 $data= $conn->prepare($sql);
@@ -95,6 +96,7 @@ $cat[$category["id"]]=$category["name"];
               <!--  <a class="dropdown-item" href="#">Something else here</a> -->
             </div>
         </li>
+        <?php if(isset($_SESSION["email"]) && $_SESSION["email"]=="admin@admin.com"){ ?>
         <li class="nav-item dropdown">
             <a class="nav-link " href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 +
@@ -105,6 +107,7 @@ $cat[$category["id"]]=$category["name"];
               <!--  <a class="dropdown-item" href="#">Something else here</a> -->
             </div>
         </li>
+        <?php }?>
     </ul>
     </div>
 

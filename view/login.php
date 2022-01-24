@@ -61,7 +61,7 @@ require("../view/header.php");
         <input type="checkbox" name="remember" class="form-check-input" id="exampleCheck1">
         <label class="form-check-label" for="exampleCheck1">Check me out</label>
     </div>
-    <button type="submit" name="signin"class="btn btn-primary">Sign In</button>
+    <button type="submit" name="signin"class="btn btn-warning">Sign In</button>
 </form>
     <br>
     Ohh really? you don't have an account yet? <br>Harry click <a href="signup.php">here</a> to get one.
